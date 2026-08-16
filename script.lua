@@ -1,44 +1,32 @@
--- Загрузка библиотеки WindUI
-local WindUI = loadstring(game:HttpGet("https://tree-hub.vercel.app/api/UI/WindUI"))()
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 
--- Настройка профиля
 local player = game.Players.LocalPlayer
 local userRole = "Пользователь"
 if player.Name == "LIN_A8826" then
     userRole = "Владелец"
 end
 
--- Создание окна
-local Window = WindUI:CreateWindow({
-    Title = "Murder Mystery 2",
-    Subtitle = "space scripts",
-    Author = "by Assistant",
-    Folder = "MM2Config",
-    Size = UDim2.fromOffset(580, 400),
-    Transparent = true,
-    Theme = "Dark",
+local Window = Fluent:CreateWindow({
+    Title = "MM2 Script | Delta",
+    SubTitle = "by Assistant",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Theme = "Dark"
 })
 
--- Создание профиля внизу меню (как на скриншоте)
-Window:SetUser({
-    Username = player.Name,
-    Title = userRole,
-    Image = game:GetService("Players"):GetUserThumbnailAsync(
-        player.UserId, 
-        Enum.ThumbnailType.HeadShot, 
-        Enum.ThumbnailSize.Size420x420
-    )
+local Tabs = {
+    Main = Window:AddTab({ Title = "Главное", Icon = "home" }),
+    Player = Window:AddTab({ Title = "Игрок", Icon = "user" })
+}
+
+Tabs.Main:AddParagraph({
+    Title = "Профиль",
+    Content = "Ник: " .. player.Name .. "\nРоль: " .. userRole
 })
 
--- Вкладка Main (Главное)
-local MainTab = Window:Tab({
-    Title = "Main",
-    Icon = "box",
-})
-
-MainTab:Toggle({
+Tabs.Main:AddToggle("ESPToggle", {
     Title = "Подсветка игроков (ESP)",
-    Value = false,
+    Default = false,
     Callback = function(Value)
         for _, p in pairs(game.Players:GetPlayers()) do
             if p ~= player and p.Character then
@@ -58,13 +46,7 @@ MainTab:Toggle({
     end
 })
 
--- Вкладка Murder
-local MurderTab = Window:Tab({
-    Title = "Murder",
-    Icon = "sword",
-})
-
-MurderTab:Button({
+Tabs.Main:AddButton({
     Title = "Убить Мардера (Авто-ТП)",
     Callback = function()
         for _, p in pairs(game.Players:GetPlayers()) do
@@ -76,13 +58,7 @@ MurderTab:Button({
     end
 })
 
--- Вкладка Sheriff
-local SheriffTab = Window:Tab({
-    Title = "Sheriff",
-    Icon = "disc",
-})
-
-SheriffTab:Button({
+Tabs.Main:AddButton({
     Title = "Убить Шерифа (Авто-ТП)",
     Callback = function()
         for _, p in pairs(game.Players:GetPlayers()) do
@@ -90,6 +66,19 @@ SheriffTab:Button({
                 player.Character.HumanoidRootPart.CFrame = p.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2)
                 break
             end
+        end
+    end
+})
+
+Tabs.Player:AddSlider("SpeedSlider", {
+    Title = "Скорость бега",
+    Default = 16,
+    Min = 16,
+    Max = 100,
+    Rounding = 0,
+    Callback = function(Value)
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.WalkSpeed = Value
         end
     end
 })

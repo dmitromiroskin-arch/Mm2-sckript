@@ -12,7 +12,7 @@ end
 -- Определение роли (Владелец для вашего ника)
 local player = game.Players.LocalPlayer
 local userRole = "Пользователь"
-if player.Name == "dmitromiroskin-arch" or player.Name == "oscarandbuck" then
+if player.Name == "LIN_A8826" then
     userRole = "Владелец"
 end
 

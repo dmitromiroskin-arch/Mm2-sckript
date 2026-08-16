@@ -1,5 +1,14 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+-- Расчет времени использования
+local startTime = tick()
+local function getUsageTime()
+    local seconds = math.floor(tick() - startTime)
+    local minutes = math.floor(seconds / 60)
+    local hours = math.floor(minutes / 60)
+    return string.format("%02d:%02d:%02d", hours, minutes % 60, seconds % 60)
+end
+
 local player = game.Players.LocalPlayer
 local userRole = "Пользователь"
 if player.Name == "LIN_A8826" then
@@ -11,7 +20,16 @@ local Window = Rayfield:CreateWindow({
    LoadingTitle = "Загрузка скрипта...",
    LoadingSubtitle = "by Assistant",
    ConfigurationSaving = { Enabled = false },
-   KeySystem = false
+   KeySystem = true, -- Включаем систему ключей/кодов
+   KeySettings = {
+      Title = "Проверка кода",
+      Subtitle = "Введите код доступа",
+      Note = "Подсказка: День рождения создателя",
+      FileName = "MM2PinCode",
+      SaveKey = true, -- Сохраняет код, чтобы не вводить каждый раз
+      GrabKeyFromSite = false,
+      Key = {"0811"} -- Твой код доступа
+   }
 })
 
 -- Вкладка: Главное
@@ -20,6 +38,14 @@ local MainTab = Window:CreateTab("Главное", 4483362458)
 MainTab:CreateSection("Статистика")
 MainTab:CreateLabel("Ник: " .. player.Name)
 MainTab:CreateLabel("Роль: " .. userRole)
+
+-- Живой таймер времени
+local TimeLabel = MainTab:CreateLabel("Время в скрипте: 00:00:00")
+task.spawn(function()
+    while task.wait(1) do
+        TimeLabel:Set("Время в скрипте: " .. getUsageTime())
+    end
+end)
 
 MainTab:CreateSection("Функции")
 

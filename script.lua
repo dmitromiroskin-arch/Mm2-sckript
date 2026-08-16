@@ -4,9 +4,7 @@ local Window = Rayfield:CreateWindow({
    Name = "MM2 Script | Delta",
    LoadingTitle = "Загрузка скрипта...",
    LoadingSubtitle = "by Assistant",
-   ConfigurationSaving = {
-      Enabled = false
-   },
+   ConfigurationSaving = { Enabled = false },
    KeySystem = true,
    KeySettings = {
       Title = "Проверка ключа",
@@ -19,12 +17,10 @@ local Window = Rayfield:CreateWindow({
    }
 })
 
+-- Вкладка 1: Главное
 local MainTab = Window:CreateTab("Главное", 4483362458)
 
-local ESP_Enabled = false
-
 local function ToggleESP(state)
-    ESP_Enabled = state
     for _, player in pairs(game.Players:GetPlayers()) do
         if player ~= game.Players.LocalPlayer and player.Character then
             local highlight = player.Character:FindFirstChild("Highlight")
@@ -34,7 +30,6 @@ local function ToggleESP(state)
                     highlight.Name = "Highlight"
                     highlight.Parent = player.Character
                     highlight.FillTransparency = 0.5
-                    highlight.OutlineTransparency = 0
                     
                     if player.Backpack:FindFirstChild("Gun") or player.Character:FindFirstChild("Gun") then
                         highlight.FillColor = Color3.fromRGB(0, 0, 255)
@@ -45,9 +40,7 @@ local function ToggleESP(state)
                     end
                 end
             else
-                if highlight then
-                    highlight:Destroy()
-                end
+                if highlight then highlight:Destroy() end
             end
         end
     end
@@ -57,13 +50,14 @@ MainTab:CreateToggle({
    Name = "Подсветка игроков (ESP)",
    CurrentValue = false,
    Flag = "ESPToggle",
-   Callback = function(Value)
-       ToggleESP(Value)
-   end,
+   Callback = function(Value) ToggleESP(Value) end,
 })
 
-MainTab:CreateSlider({
-   Name = "Скорость игрока",
+-- Вкладка 2: Персонаж
+local PlayerTab = Window:CreateTab("Игрок", 4483362458)
+
+PlayerTab:CreateSlider({
+   Name = "Скорость бега",
    Range = {16, 100},
    Increment = 1,
    Suffix = "Speed",
@@ -72,6 +66,20 @@ MainTab:CreateSlider({
    Callback = function(Value)
        if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+       end
+   end,
+})
+
+PlayerTab:CreateSlider({
+   Name = "Сила прыжка",
+   Range = {50, 200},
+   Increment = 5,
+   Suffix = "Power",
+   CurrentValue = 50,
+   Flag = "JumpSlider",
+   Callback = function(Value)
+       if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+           game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
        end
    end,
 })

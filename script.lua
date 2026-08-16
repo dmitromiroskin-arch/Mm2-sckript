@@ -20,15 +20,15 @@ local Window = Rayfield:CreateWindow({
    LoadingTitle = "Загрузка скрипта...",
    LoadingSubtitle = "by Assistant",
    ConfigurationSaving = { Enabled = false },
-   KeySystem = true, -- Включаем систему ключей/кодов
+   KeySystem = true,
    KeySettings = {
       Title = "Проверка кода",
       Subtitle = "Введите код доступа",
       Note = "Подсказка: День рождения создателя",
-      FileName = "MM2PinCode",
-      SaveKey = true, -- Сохраняет код, чтобы не вводить каждый раз
+      FileName = "MM2KeySystemConfig",
+      SaveKey = false, -- Отключено сохранение, чтобы код запрашивался всегда
       GrabKeyFromSite = false,
-      Key = {"0811"} -- Твой код доступа
+      Key = {"0811"}
    }
 })
 
